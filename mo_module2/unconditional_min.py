@@ -1,12 +1,12 @@
 from inspect import signature
 from numpy.linalg import norm
-from numpy import array
+from numpy import array, inf
 
 class Base:
     n = 0
     e = 0.0001
     x0 = [0,0]
-
+    
     def __init__(self):
         pass
 
@@ -24,7 +24,7 @@ class Base:
     def _prelength(foo):
         def dummie(self, *args, **kwargs):
             self.n = self._get_length_params(self)
-            foo(self, *args, **kwargs)
+            return foo(self, *args, **kwargs)
         return dummie
 
 class Gradient(Base):
