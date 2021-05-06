@@ -7,7 +7,7 @@ setuptools.setup(
     name="mo_module2",
     version="0.0.1",
     author="Oleksandr Pozden",
-    author_email="oleksandr.pozden@gmail.com",
+    author_email="pozden.sasha@gmail.com",
     description="Collection of numerical methods of unconditional minimazation tasks",
     long_description=long_description,
     long_description_content_type="text/markdown",
