@@ -1,12 +1,12 @@
 from inspect import signature
-from numpy.linalg import norm
-from numpy import array, inf
+from numpy.linalg import norm, solve
+from numpy import array, inf, eye, transpose
 
-class Base:
+class _Base:
     n = 0
     e = 0.0001
     x0 = [0,0]
-    
+
     def __init__(self):
         pass
 
@@ -27,10 +27,10 @@ class Base:
             return foo(self, *args, **kwargs)
         return dummie
 
-class Gradient(Base):
+class Gradient(_Base):
     
     @classmethod
-    @Base._prelength
+    @_Base._prelength
     def solve(self, m=100):
 
         # consts
@@ -68,5 +68,41 @@ class Gradient(Base):
         print("iterations: ",i)
         print(x_)
         return x_
+
+class NewtonRizn(_Base):
+
+    def solve(self, limit = 100):
+
+        f_der = self.f_der
+        f = self.f
+        h = self.h
+        n = self.n
+        ebasis = eye(n)
+        x_prev = self.x0
+        
+        i = 0
+        while "not found":
+            a = 1
+            A = []
+            for eb in ebasis:
+                A.append((f_der(*(x_prev+eb*h))-f_der(*x_prev))/h)
+            
+            A = array(A)
+            transpose(A)
+            
+            s = solve(A,f_der(*x_prev))
+            x = x_prev - s
+            
+            while f(*x)>f(*x_prev):
+                a = a/2
+                x = x_prev - a*s
+                
+            i+=1
+            if norm(x-x_prev)<e or norm(f_der(*x))<e or i>limit:
+                print("iteration: %i"%(i))
+                break
+            else:
+                x_prev = x
+        return 
 
     
